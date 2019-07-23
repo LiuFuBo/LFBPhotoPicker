@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="LFBShowImageCell">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="99"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="100" height="99"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PUG-zB-AeT">
+                        <rect key="frame" x="0.0" y="0.0" width="100" height="99"/>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="15m-Ru-bfh">
+                        <rect key="frame" x="0.0" y="0.0" width="100" height="99"/>
+                        <state key="focused" image="selected"/>
+                        <connections>
+                            <action selector="clickBtn:" destination="gTV-IL-0wX" eventType="touchUpInside" id="avH-nC-9H6"/>
+                        </connections>
+                    </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_photo_hook" translatesAutoresizingMaskIntoConstraints="NO" id="3Tc-hh-t06">
+                        <rect key="frame" x="75" y="0.0" width="25" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="i8l-vX-nZT"/>
+                            <constraint firstAttribute="width" constant="25" id="j2l-Fi-XrO"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="PUG-zB-AeT" secondAttribute="trailing" id="1zN-O9-sVC"/>
+                <constraint firstItem="15m-Ru-bfh" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="4ZC-8Z-cAT"/>
+                <constraint firstAttribute="bottom" secondItem="PUG-zB-AeT" secondAttribute="bottom" id="7BD-vd-wHk"/>
+                <constraint firstItem="15m-Ru-bfh" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="PGs-C3-8lw"/>
+                <constraint firstItem="PUG-zB-AeT" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="TaN-A9-gNC"/>
+                <constraint firstAttribute="bottom" secondItem="15m-Ru-bfh" secondAttribute="bottom" id="fOn-Ly-qC0"/>
+                <constraint firstItem="PUG-zB-AeT" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="gnr-8v-LT6"/>
+                <constraint firstItem="3Tc-hh-t06" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="itV-4A-dn2"/>
+                <constraint firstAttribute="trailing" secondItem="3Tc-hh-t06" secondAttribute="trailing" id="ixR-XT-nxL"/>
+                <constraint firstAttribute="trailing" secondItem="15m-Ru-bfh" secondAttribute="trailing" id="ugF-eV-t2x"/>
+            </constraints>
+            <size key="customSize" width="86" height="71"/>
+            <connections>
+                <outlet property="imageView" destination="PUG-zB-AeT" id="tBp-m1-pCa"/>
+                <outlet property="imageViewTick" destination="3Tc-hh-t06" id="QPz-Fv-bZX"/>
+                <outlet property="selectBtn" destination="15m-Ru-bfh" id="TFw-DW-Djn"/>
+            </connections>
+            <point key="canvasLocation" x="49.600000000000001" y="74.212893553223395"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="ic_photo_hook" width="23" height="23"/>
+        <image name="selected" width="38" height="38"/>
+    </resources>
+</document>
