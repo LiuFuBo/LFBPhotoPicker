@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		134FA23022E949DF00058A42 /* CollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 134FA22F22E949DF00058A42 /* CollectionViewCell.m */; };
+		134FA23322E94A0500058A42 /* PhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 134FA23222E94A0500058A42 /* PhotoModel.m */; };
+		134FA23722E9909600058A42 /* photo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 134FA23622E9909600058A42 /* photo.gif */; };
 		13D265DE22E6BADE00D562D3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13D265DD22E6BADE00D562D3 /* AppDelegate.m */; };
 		13D265E122E6BADE00D562D3 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13D265E022E6BADE00D562D3 /* ViewController.m */; };
 		13D265E422E6BADE00D562D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13D265E222E6BADE00D562D3 /* Main.storyboard */; };
@@ -61,6 +64,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		134FA22E22E949DF00058A42 /* CollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionViewCell.h; sourceTree = "<group>"; };
+		134FA22F22E949DF00058A42 /* CollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionViewCell.m; sourceTree = "<group>"; };
+		134FA23122E94A0500058A42 /* PhotoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotoModel.h; sourceTree = "<group>"; };
+		134FA23222E94A0500058A42 /* PhotoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotoModel.m; sourceTree = "<group>"; };
+		134FA23622E9909600058A42 /* photo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = photo.gif; sourceTree = "<group>"; };
 		13D265D922E6BADE00D562D3 /* LFBPhotoPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LFBPhotoPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13D265DC22E6BADE00D562D3 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		13D265DD22E6BADE00D562D3 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -183,12 +191,17 @@
 				13D265DD22E6BADE00D562D3 /* AppDelegate.m */,
 				13D265DF22E6BADE00D562D3 /* ViewController.h */,
 				13D265E022E6BADE00D562D3 /* ViewController.m */,
+				134FA22E22E949DF00058A42 /* CollectionViewCell.h */,
+				134FA22F22E949DF00058A42 /* CollectionViewCell.m */,
+				134FA23122E94A0500058A42 /* PhotoModel.h */,
+				134FA23222E94A0500058A42 /* PhotoModel.m */,
 				13D2660E22E6BB1100D562D3 /* LFBPhotoPickerManagers */,
 				13D265E222E6BADE00D562D3 /* Main.storyboard */,
 				13D265E522E6BAE400D562D3 /* Assets.xcassets */,
 				13D265E722E6BAE400D562D3 /* LaunchScreen.storyboard */,
 				13D265EA22E6BAE400D562D3 /* Info.plist */,
 				13D265EB22E6BAE400D562D3 /* main.m */,
+				134FA23622E9909600058A42 /* photo.gif */,
 			);
 			path = LFBPhotoPicker;
 			sourceTree = "<group>";
@@ -405,6 +418,7 @@
 				13D2665E22E6DDF700D562D3 /* ic_photo_hook_p@2x.png in Resources */,
 				13D2665D22E6DDF700D562D3 /* ic_photo_hook@2x.png in Resources */,
 				13D2664B22E6BFA400D562D3 /* LICENSE in Resources */,
+				134FA23722E9909600058A42 /* photo.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +445,7 @@
 			files = (
 				13D2665222E6BFA400D562D3 /* View+MASAdditions.m in Sources */,
 				13D2665522E6BFA400D562D3 /* MASViewAttribute.m in Sources */,
+				134FA23322E94A0500058A42 /* PhotoModel.m in Sources */,
 				13D2664C22E6BFA400D562D3 /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				13D2662522E6BB1100D562D3 /* PHAssetLibrary.m in Sources */,
 				13D2662822E6BB1100D562D3 /* LFBAsset.m in Sources */,
@@ -440,6 +455,7 @@
 				13D2664F22E6BFA400D562D3 /* MASConstraintMaker.m in Sources */,
 				13D2664D22E6BFA400D562D3 /* ViewController+MASAdditions.m in Sources */,
 				13D2662C22E6BD3D00D562D3 /* LFBNaviServer.m in Sources */,
+				134FA23022E949DF00058A42 /* CollectionViewCell.m in Sources */,
 				13D2662122E6BB1100D562D3 /* LFBSelfImage.m in Sources */,
 				13D2662022E6BB1100D562D3 /* LFBImageGroupVC.m in Sources */,
 				13D265EC22E6BAE400D562D3 /* main.m in Sources */,
