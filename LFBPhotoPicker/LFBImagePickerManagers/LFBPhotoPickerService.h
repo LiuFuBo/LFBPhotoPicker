@@ -29,11 +29,26 @@ typedef void(^LFBPhotoPickerCallback)(NSArray *pics);
 
 
 /**
- 设置photo style (默认拍照选择样式)
+ 设置photo style
 
  @param style 类型
  */
 - (void)lfb_SetPhotoPickerStyle:(LFBPhotoPickerStyle)style;
+
+/**
+ 获取相册/拍摄所得图片
+ 
+ @param callback 返回装有图片的数组
+ */
+- (void)lfb_GetPicture:(LFBPhotoPickerCallback)callback;
+
+/**
+ 获取相册/拍摄所得图片
+ 
+ @param title 设置弹出选择框标题
+ @param callback 返回装有图片的数组
+ */
+- (void)lfb_GetPicture:(NSString *)title callBack:(LFBPhotoPickerCallback)callback;
 
 /**
  获取相册/拍摄所得图片
@@ -43,21 +58,6 @@ typedef void(^LFBPhotoPickerCallback)(NSArray *pics);
  @param callback 返回装有图片的数组
  */
 - (void)lfb_GetPicture:(NSString *)title maxCount:(int)maxCount callBack:(LFBPhotoPickerCallback)callback;
-
-/**
- 获取相册/拍摄所得图片
-
- @param title 设置弹出选择框标题
- @param callback 返回装有图片的数组
- */
-- (void)lfb_GetPicture:(NSString *)title callBack:(LFBPhotoPickerCallback)callback;
-
-/**
- 获取相册/拍摄所得图片
-
- @param callback 返回装有图片的数组
- */
-- (void)lfb_GetPicture:(LFBPhotoPickerCallback)callback;
 
 
 @end

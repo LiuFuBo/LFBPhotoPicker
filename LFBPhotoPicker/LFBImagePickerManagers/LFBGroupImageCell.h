@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface YXYTGroupImageCell : UITableViewCell
+@interface LFBGroupImageCell : UITableViewCell
 
 - (void)setText:(NSString *)text;
 - (void)setImage:(UIImage *)image;

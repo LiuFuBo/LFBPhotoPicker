@@ -1,41 +1,32 @@
 //
-//  LFBNaviServer.m
-//  LFBNovel
+//  LFBNavigator.m
+//  LFBPhotoPicker
 //
-//  Created by liufubo on 2019/6/3.
-//  Copyright © 2019 liufubo. All rights reserved.
+//  Created by liufubo on 2020/10/23.
+//  Copyright © 2020 liufubo. All rights reserved.
 //
 
-#import "LFBNaviServer.h"
+#import "LFBNavigator.h"
 
-@implementation LFBNaviServer
 
-+ (void)pushWithViewController:(UIViewController *)controller{
-    [[self getNavigation].navigationController pushViewController:controller animated:YES];
+@implementation LFBNavigator
+
++ (void)pushWithViewController:(UIViewController *)controller {
+    [[LFBNavigator getNavigation] pushViewController:controller animated:YES];
 }
 
-+ (void)popToViewController{
-    [[self getNavigation] popViewControllerAnimated:YES];
++ (void)presentWithViewController:(UIViewController *)controller {
+     controller.modalPresentationStyle = UIModalPresentationFullScreen;
+    [[LFBNavigator getTopVC] presentViewController:controller animated:YES completion:nil];
 }
 
-+ (void)popToRootViewController{
-    [[self getNavigation] popToRootViewControllerAnimated:YES];
++ (void)presentWithNaviController:(UINavigationController *)naviController {
+    naviController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [[LFBNavigator getTopVC] presentViewController:naviController animated:YES completion:nil];
 }
 
-+ (void)popToTargetViewController:(Class)classVC{
-    for (UIViewController *vc in [self getNavigation].viewControllers) {
-        if ([vc isKindOfClass:classVC]) {
-            [[self getNavigation] popToViewController:vc animated:YES];
-        }
-    }
-}
-
-+ (void)presentWithViewController:(UIViewController *)controller{
-    [[self topViewController] presentViewController:controller animated:YES completion:nil];
-}
-
-+ (void)dismissViewController:(UIViewController *)controller{
-    [controller dismissViewControllerAnimated:YES completion:nil];
++ (void)dismissViewControllerAnimated:(BOOL)Animated {
+    [[LFBNavigator getTopVC] dismissViewControllerAnimated:Animated completion:nil];
 }
 
 + (UINavigationController *)getNavigation{
@@ -44,12 +35,8 @@
     return navigation;
 }
 
-+ (UIViewController *)naviServer {
-    return [LFBNaviServer topViewController];
-}
-
-#pragma mark - 获取顶层Vc
-+ (UIViewController *)topViewController{
++ (UIViewController *)getTopVC {
+    
     UIViewController *rootViewController =[[[[UIApplication sharedApplication] delegate] window] rootViewController];
     return  [self topViewControllerWithRootViewController:rootViewController];
 }
@@ -71,6 +58,5 @@
         return rootViewController;
     }
 }
-
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "LFBShowImageCell.h"
-#import "LFBNaviServer.h"
+#import "LFBNavigator.h"
 
 @interface LFBShowImageCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *imageViewTick;
@@ -52,7 +52,7 @@
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:message preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil]];
-        [[LFBNaviServer naviServer] presentViewController:alert animated:YES completion:nil];
+        [LFBNavigator presentWithViewController:alert];
     }else{
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"温馨提示" message:message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [alertView show];

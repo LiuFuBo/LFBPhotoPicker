@@ -11,9 +11,9 @@
 #import "LFBPhotoPickerService.h"
 #import "LFBShowImageVC.h"
 #import "PHAssetLibrary.h"
-#import "LFBPhotoPickerPrivate.h"
-#import "YXYTGroupImageCell.h"
-
+#import "LFBGroupImageCell.h"
+#import "LFBPhotoPicker.h"
+#import "Masonry.h"
 
 
 static NSString *const LFBImageGroupVCCellIdentifier = @"LFBImageGroupVCCellIdentifier";
@@ -39,6 +39,7 @@ static NSString *const LFBImageGroupVCCellIdentifier = @"LFBImageGroupVCCellIden
 }
 
 - (void)initConfig{
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     if (@available(iOS 11.0, *)) {
         self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     } else {
@@ -47,17 +48,19 @@ static NSString *const LFBImageGroupVCCellIdentifier = @"LFBImageGroupVCCellIden
 }
 
 - (void)addSubViews{
-    self.navigationController.navigationBar.translucent = NO;
     [self.view addSubview:self.tableView];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.insets(UIEdgeInsetsZero);
+    }];
 }
 
 - (void)bindingData{
     _imageArray = [NSMutableArray array];
     //获取相册个数
-    @weakify(self);
+    @l_weakify(self);
     PHAssetLibrary *library = [[PHAssetLibrary alloc]init];
     [library lfb_countOfAlbumGroup:^(NSArray<PHCollection *> *collections) {
-        @strongify(self);
+        @l_strongify(self);
         [self.imageArray addObjectsFromArray:collections];
         [self.tableView reloadData];
     }];
@@ -99,9 +102,9 @@ static NSString *const LFBImageGroupVCCellIdentifier = @"LFBImageGroupVCCellIden
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    YXYTGroupImageCell *cell = [tableView dequeueReusableCellWithIdentifier:LFBImageGroupVCCellIdentifier];
+    LFBGroupImageCell *cell = [tableView dequeueReusableCellWithIdentifier:LFBImageGroupVCCellIdentifier];
     if (!cell) {
-        cell = [[YXYTGroupImageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:LFBImageGroupVCCellIdentifier];
+        cell = [[LFBGroupImageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:LFBImageGroupVCCellIdentifier];
     }
     PHAssetCollection *group = (PHAssetCollection *)[_imageArray objectAtIndex:indexPath.row];
     PHFetchOptions *option = [[PHFetchOptions alloc]init];
@@ -138,11 +141,12 @@ static NSString *const LFBImageGroupVCCellIdentifier = @"LFBImageGroupVCCellIden
 
 - (UITableView *)tableView{
     return _tableView?:({
-        _tableView = [[UITableView alloc]initWithFrame:self.view.frame style:UITableViewStylePlain];
-        [_tableView registerClass:[YXYTGroupImageCell class] forCellReuseIdentifier:LFBImageGroupVCCellIdentifier];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectZero style:UITableViewStylePlain];
+        [_tableView registerClass:[LFBGroupImageCell class] forCellReuseIdentifier:LFBImageGroupVCCellIdentifier];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.showsHorizontalScrollIndicator = NO;
+        _tableView.backgroundColor = [UIColor whiteColor];
         _tableView.tableFooterView = [UIView new];
         [_tableView setEstimatedSectionHeaderHeight:0];
         [_tableView setEstimatedSectionFooterHeight:0];

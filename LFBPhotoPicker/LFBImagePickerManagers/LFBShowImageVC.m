@@ -10,8 +10,8 @@
 #import "LFBShowImageCell.h"
 #import "LFBSelfImage.h"
 #import "LFBAsset.h"
-#import "LFBPhotoPickerPrivate.h"
 #import "PHAssetLibrary.h"
+#import "LFBPhotoPicker.h"
 
 
 static NSString *const LFBShowImageCellIdentifier = @"LFBShowImageCellIdentifier";
@@ -62,9 +62,9 @@ static NSString *const LFBShowImageCellIdentifier = @"LFBShowImageCellIdentifier
     _startLoad = YES;
     //获取照片
     PHAssetLibrary *libray = [[PHAssetLibrary alloc]init];
-    @weakify(self);
+    @l_weakify(self);
     [libray lfb_callAllPhoto:_group result:^(NSArray<LFBAsset *> *assets) {
-        @strongify(self);
+        @l_strongify(self);
         [self.dataSource addObjectsFromArray:assets];
         [self.collectionView reloadData];
     }];
@@ -92,10 +92,12 @@ static NSString *const LFBShowImageCellIdentifier = @"LFBShowImageCellIdentifier
     if (images.count == 0 && self.selectedArray.count != 0) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"正在从iCloud上下载图片，请稍候..." preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil]];
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:alert animated:YES completion:nil];
     }else if (images.count == 0){
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"温馨提示" message:@"您还未选择图片" preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil]];
+        self.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:alert animated:YES completion:nil];
     }else{
         NSDictionary *dicImg = @{@"picture":images};
@@ -113,9 +115,9 @@ static NSString *const LFBShowImageCellIdentifier = @"LFBShowImageCellIdentifier
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
 
     LFBShowImageCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:LFBShowImageCellIdentifier forIndexPath:indexPath];
-    @weakify(self);
+    @l_weakify(self);
     [cell p_clickButtonWithBlock:^(UIButton *sender) {
-      @strongify(self);
+      @l_strongify(self);
             if(!sender.selected){
                 if (self.selectedArray.count == self.maxImageCount) {
                     //不能选择了，所以要把已经改变了选择状态的变回来
@@ -138,7 +140,7 @@ static NSString *const LFBShowImageCellIdentifier = @"LFBShowImageCellIdentifier
     
     //按钮选中块
     cell.selectedBlock = ^(NSInteger index){
-        @strongify(self);
+        @l_strongify(self);
         //把选中的图片放倒一个数组里面
         LFBAsset *asset = [self.dataSource objectAtIndex:index];
         asset.index = index;
@@ -149,7 +151,7 @@ static NSString *const LFBShowImageCellIdentifier = @"LFBShowImageCellIdentifier
     };
     //取消选定
     cell.cancelBlock = ^(NSInteger index){
-        @strongify(self);
+        @l_strongify(self);
         //找出取消的cell
         for (int assetIndex=0; assetIndex<self.selectedArray.count; assetIndex++) {
             LFBAsset *asset = [self.selectedArray objectAtIndex:assetIndex];
@@ -256,7 +258,7 @@ static NSString *const LFBShowImageCellIdentifier = @"LFBShowImageCellIdentifier
 - (UICollectionView *)collectionView{
 
     return _collectionView?:({
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - ([UIApplication sharedApplication].statusBarFrame.size.height + 44)) collectionViewLayout:[self setFlowOut]];
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - ([UIApplication sharedApplication].statusBarFrame.size.height + 44)) collectionViewLayout:[self setFlowOut]];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         if (_color) {

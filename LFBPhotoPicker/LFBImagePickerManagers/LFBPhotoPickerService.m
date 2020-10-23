@@ -5,21 +5,21 @@
 //  Created by branon_liu on 2017/9/21.
 //  Copyright © 2017年 postop_iosdev. All rights reserved.
 //
+
 #import "LFBPhotoPickerService.h"
 #import "PHAssetLibrary.h"
-#import "LFBNaviServer.h"
 #import <AVFoundation/AVCaptureDevice.h>
 #import <AVFoundation/AVMediaFormat.h>
 #import "LFBImageGroupVC.h"
 #import <objc/runtime.h>
-#import "LFBPhotoPickerPrivate.h"
+#import "LFBNavigator.h"
+#import "LFBPhotoPicker.h"
 
 
 @interface LFBPhotoPickerService ()<UIActionSheetDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic, assign) int maxCount;
 @property (nonatomic, copy) LFBPhotoPickerCallback callback;
-@property (nonatomic, weak) UIViewController *currentViewController;
 @property (nonatomic, assign) LFBPhotoPickerStyle isSelectedPhotoAlbum;
 @end
 
@@ -54,29 +54,43 @@
 }
 
 - (void)lfb_GetPicture:(NSString *)title maxCount:(int)maxCount callBack:(LFBPhotoPickerCallback)callback{
-    self.currentViewController = [LFBNaviServer naviServer];
     self.maxCount = maxCount;
     self.callback = callback;
     switch (self.isSelectedPhotoAlbum) {
         case LFBPhotoPickerStyleCamera:
         {
-            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄", nil];
-            [actionSheet setTag:LFBPhotoPickerStyleCamera];
-            [actionSheet showInView:self.currentViewController.view];
+            UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            [actionSheet addAction:[UIAlertAction actionWithTitle:@"拍摄" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self pickerServiceAccessPhotoWithCamera];
+            }]];
+            [actionSheet addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            [LFBNavigator presentWithViewController:actionSheet];;
         }
             break;
         case LFBPhotoPickerStyleAlbum:
         {
-            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"从相册中选择", nil];
-            [actionSheet setTag:LFBPhotoPickerStyleAlbum];
-            [actionSheet showInView:self.currentViewController.view];
+            
+            UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            [actionSheet addAction:[UIAlertAction actionWithTitle:@"从相册中选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self pickerServiceAccessPhotoWithAlbum];
+            }]];
+            [actionSheet addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            [LFBNavigator presentWithViewController:actionSheet];
+            
         }
             break;
         case LFBPhotoPickerStyleAllDevice:
         {
-            UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:title delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"拍摄",@"从相册中选择", nil];
-            [actionSheet setTag:LFBPhotoPickerStyleAllDevice];
-            [actionSheet showInView:self.currentViewController.view];
+            
+            UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            [actionSheet addAction:[UIAlertAction actionWithTitle:@"拍摄" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self pickerServiceAccessPhotoWithCamera];
+            }]];
+            [actionSheet addAction:[UIAlertAction actionWithTitle:@"从相册中选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self pickerServiceAccessPhotoWithAlbum];
+            }]];
+            [actionSheet addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            [LFBNavigator presentWithViewController:actionSheet];
         }
             break;
         default:
@@ -94,43 +108,14 @@
     [self lfb_GetPicture:@"请选择图片" callBack:callback];
 }
 
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    if (actionSheet.tag == LFBPhotoPickerStyleAllDevice) {
-        if (buttonIndex == 0) {
-         [self pickerServiceAccessPhotoWithCamera];
-        [actionSheet dismissWithClickedButtonIndex:0 animated:YES];
-        }else if (buttonIndex == 1){
-            [self pickerServiceAccessPhotoWithAlbum];
-        }
-    }else if (actionSheet.tag == LFBPhotoPickerStyleCamera){
-        if (buttonIndex == 0) {
-            [self pickerServiceAccessPhotoWithCamera];
-            [actionSheet dismissWithClickedButtonIndex:0 animated:YES];
-        }
-    }else if (actionSheet.tag == LFBPhotoPickerStyleAlbum){
-        if (buttonIndex == 0) {
-            [self pickerServiceAccessPhotoWithAlbum];
-            [actionSheet dismissWithClickedButtonIndex:0 animated:YES];
-        }
-    }
-}
-
 - (void)pickerServiceAccessPhotoWithCamera{
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"相机不能打开" message:@"请在设置-隐私-相机里面把相机权限打开" preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil]];
-            [self.currentViewController presentViewController:alert animated:YES completion:nil];
-        }else{
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"相机不能打开" message:@"请在设置-隐私-相机里面把相机权限打开" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alertView show];
-        }
-        return;
+            [LFBNavigator presentWithViewController:alert];
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self p_showWithType:UIImagePickerControllerSourceTypeCamera viewController:self.currentViewController allowsEditing:NO finishedBlock:self.callback];
+        [self p_showWithType:UIImagePickerControllerSourceTypeCamera allowsEditing:NO finishedBlock:self.callback];
     });
 }
 
@@ -139,22 +124,16 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if (status == PHAuthorizationStatusRestricted || status ==PHAuthorizationStatusDenied)
             {
-                if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
                     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"相册不能打开" message:@"请在设置-隐私-相册里面把相机权限打开" preferredStyle:UIAlertControllerStyleAlert];
                     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil]];
-                    [self.currentViewController presentViewController:alert animated:YES completion:nil];
-                }else{
-                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"相册不能打开" message:@"请在设置-隐私-相册里面把相机权限打开" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-                    [alertView show];
-                }
-                return;
+                    [LFBNavigator presentWithViewController:alert];
             }
             LFBImageGroupVC *groupVc = [[LFBImageGroupVC alloc]init];
             groupVc.albumColor = [UIColor whiteColor];
-            groupVc.listCount = 4;
+            groupVc.listCount = 3;
             groupVc.maxImageCount = self.maxCount;
             UINavigationController *Nav = [[UINavigationController alloc]initWithRootViewController:groupVc];
-            [self.currentViewController presentViewController:Nav animated:YES completion:nil];
+            [LFBNavigator presentWithNaviController:Nav];
         });
     }];
 }
@@ -162,14 +141,9 @@
 - (void)pickerServiceAccessPhotoFail {
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"获取拍摄图片失败" message:@"请在设置-隐私-相册里面把相机权限打开" preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil]];
-            [[LFBNaviServer naviServer] presentViewController:alert animated:YES completion:nil];
-        }else{
-            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"获取拍摄图片失败" message:@"请在设置-隐私-相册里面把相机权限打开" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-            [alertView show];
-        }
+            [LFBNavigator presentWithViewController:alert];
     });
 }
 
@@ -178,7 +152,7 @@
     NSArray *array = [NSArray arrayWithArray:info.userInfo[@"picture"]];
     self.callback(array);
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-         [self.currentViewController dismissViewControllerAnimated:YES completion:nil];
+         [LFBNavigator dismissViewControllerAnimated:YES];
     });
 }
 
@@ -198,7 +172,7 @@
 }
 
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInf{
-    @weakify(self);
+    @l_weakify(self);
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (status == PHAuthorizationStatusRestricted || status ==PHAuthorizationStatusDenied){
@@ -207,7 +181,7 @@
                 //获取操作的图片
                 PHAssetLibrary *libray = [[PHAssetLibrary alloc]init];
                 [libray lfb_afterCameraAsset:^(PHAsset *asset) {
-                    @strongify(self);
+                    @l_strongify(self);
                     if (!asset) {
                         return;
                     }
@@ -233,7 +207,7 @@
 }
 
 #pragma mark - private
-- (void)p_showWithType:(UIImagePickerControllerSourceType)type viewController:(nonnull UIViewController *)vc allowsEditing:(BOOL)allowsEditing finishedBlock:(nonnull void(^)(NSArray * _Nonnull pics))block{
+- (void)p_showWithType:(UIImagePickerControllerSourceType)type allowsEditing:(BOOL)allowsEditing finishedBlock:(nonnull void(^)(NSArray * _Nonnull pics))block{
     
     UIImagePickerController *imageVc = [[UIImagePickerController alloc]init];
     imageVc.sourceType = type;
@@ -244,8 +218,7 @@
     objc_setAssociatedObject(manager, (__bridge void *)manager, manager, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     imageVc.delegate = manager;
     imageVc.allowsEditing = allowsEditing;
-    imageVc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    [vc presentViewController:imageVc animated:YES completion:nil];
+    [LFBNavigator presentWithViewController:imageVc];
 }
 
 

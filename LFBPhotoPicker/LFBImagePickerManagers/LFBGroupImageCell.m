@@ -6,15 +6,15 @@
 //  Copyright © 2019 yixingyiting. All rights reserved.
 //
 
-#import "YXYTGroupImageCell.h"
+#import "LFBGroupImageCell.h"
 #import "Masonry.h"
 
-@interface YXYTGroupImageCell ()
+@interface LFBGroupImageCell ()
 @property (nonatomic, strong) UIImageView *imageViewIcon;
 @property (nonatomic, strong) UILabel *labelName;
 @end
 
-@implementation YXYTGroupImageCell
+@implementation LFBGroupImageCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
